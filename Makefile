@@ -1,4 +1,6 @@
 REQUIREMENTS_TXT ?= requirements.txt requirements-dev.txt
+WORKDIR?=.
+VENVDIR ?= $(WORKDIR)/.aprsd-sentry-plugin-venv
 .DEFAULT_GOAL := help
 
 .PHONY: help dev test
