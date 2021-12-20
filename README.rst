@@ -36,13 +36,8 @@ APRSD Plugin for sentry support
 Features
 --------
 
-* TODO
-
-
-Requirements
-------------
-
-* TODO
+* This is a simple APRSD plugin that simply initializes communication to a running Sentry service.
+* http://sentry.io
 
 
 Installation
