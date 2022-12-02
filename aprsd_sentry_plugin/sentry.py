@@ -1,7 +1,7 @@
 import logging
 
 import sentry_sdk
-from aprsd import messaging, plugin, trace
+from aprsd import messaging, plugin
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 import aprsd_sentry_plugin
@@ -45,6 +45,5 @@ class SentryPlugin(plugin.APRSDPluginBase):
     def filter(self, packet):
         return messaging.NULL_MESSAGE
 
-    @trace.trace
     def process(self, packet):
         pass
