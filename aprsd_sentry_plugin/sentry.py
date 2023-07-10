@@ -2,11 +2,14 @@ import logging
 
 import sentry_sdk
 from aprsd import messaging, plugin
+from oslo_config import cfg
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 import aprsd_sentry_plugin
+from aprsd_sentry_plugin.conf import sentry as sentry_conf
 
 
+CONF = cfg.CONF
 LOG = logging.getLogger("APRSD")
 
 
@@ -21,15 +24,15 @@ class SentryPlugin(plugin.APRSDPluginBase):
         will prevent the plugin from being called when packets are
         received."""
         # Do some checks here?
-        self.enabled = True
-        try:
-            self.config.exists(["services", "sentry", "dsn"])
-        except Exception as ex:
-            LOG.error(f"Failed to find config services.sentry.dsn {ex}")
+        if CONF.aprsd_sentry_plugin.dsn == sentry_conf.DEFAULT_DSN:
+            LOG.error(
+                "Using default DSN for Sentry.  "
+                "Please set services.sentry.dsn in config file.",
+            )
             self.enabled = False
             return
 
-        dsn = self.config.get("services.sentry.dsn")
+        dsn = CONF.aprsd_sentry_plugin.dsn
         LOG.info(f"Initializing Sentry to DSN {dsn}")
 
         sentry_sdk.init(
@@ -41,6 +44,7 @@ class SentryPlugin(plugin.APRSDPluginBase):
             integrations=[FlaskIntegration()],
             release=f"APRSD_SENTRY@{aprsd_sentry_plugin.__version__}",
         )
+        self.enabled = True
 
     def filter(self, packet):
         return messaging.NULL_MESSAGE

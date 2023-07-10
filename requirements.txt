@@ -1,4 +1,5 @@
 pbr
-aprsd>=2.5.0
+aprsd>=3.0.0
 sentry-sdk
 blinker
+oslo.config
